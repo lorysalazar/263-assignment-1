@@ -8,4 +8,36 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 library(tidyverse)
+library(janitor)
+library(ggfortify)
+```
+
+```{r}
+# We begin by reading in the dataset and cleaning it up.
+world_env_vars <- read.csv(here("data","world_env_vars.csv")) %>% 
+  clean_names() %>% 
+  mutate(across(where(is.character), tolower))
+
+# Next, we are selecting the variables that we want to use in our PCA and creating a subset only containing those variables. 
+env_pca <- world_env_vars %>% 
+  select(rain_mean_annual, temp_mean_annual, cloudiness, tree_canopy_cover) %>% 
+  drop_na() %>% 
+  scale() %>% 
+  prcomp()
+
+# Next, we create another subset of the data that drops the NAs for the variables we are interested in, but still included all other variables that we may want to use when we create a plot.
+env_complete <- world_env_vars %>% 
+  drop_na(rain_mean_annual, temp_mean_annual, cloudiness, tree_canopy_cover)
+
+# Finally, using the data subsets we created, we create a biplot for our PCA.
+autoplot(env_pca,
+         data = env_complete,
+         loadings = TRUE,
+         loadings.label = TRUE,
+         loadings.label.vjust = -0.3,
+         loadings.label.hjust = -0.1
+         ) +
+  labs(title = "Principal components analysis of countries' tree cover, cloudiness,\nand mean annual temperature and rain") +
+  theme_minimal()
+
 ```
