@@ -41,4 +41,3 @@ autoplot(env_pca,
   theme_minimal()
 
 ```
-
