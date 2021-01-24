@@ -14,6 +14,7 @@ library(lubridate)
 ```
 
 ```{r}
+# We begin by reading in the data using read_excel from the readxl package.
 amphibians <- read_excel(here("data","sierra_amphibians.xlsx"))
 
 # Create a subset of the data to only include: adult, subadult, and tadpole mountain yellow-legged frogs
@@ -26,5 +27,15 @@ yellow_frogs <- amphibians %>%
          ) %>% 
   mutate(survey_date = ymd(survey_date)) %>% 
   mutate(year = year(survey_date))
+
+# Next, we will use the group_by function to group the frogs by year, and then take the total count of the frogs for each given year and life stage
+frog_count <- yellow_frogs %>% 
+  group_by(year) %>% 
+  count(amphibian_life_stage, wt = amphibian_number)
+
+# Next, we create a plot of the data. 
+ggplot(data = frog_count, aes(x = year, y = n)) +
+  geom_col() +
+  facet_wrap(~amphibian_life_stage, scales = "free")
 ```
 
