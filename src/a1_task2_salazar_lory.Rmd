@@ -1,0 +1,11 @@
+---
+title: "PCA"
+author: "Lory Salazar"
+date: "1/24/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(tidyverse)
+```
