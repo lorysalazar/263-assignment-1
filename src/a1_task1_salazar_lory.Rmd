@@ -13,6 +13,9 @@ library(readxl)
 library(lubridate)
 ```
 
+## Describe here 
+etc etc
+
 ```{r}
 # We begin by reading in the data using read_excel from the readxl package.
 amphibians <- read_excel(here("data","sierra_amphibians.xlsx"))
@@ -36,6 +39,37 @@ frog_count <- yellow_frogs %>%
 # Next, we create a plot of the data. 
 ggplot(data = frog_count, aes(x = year, y = n)) +
   geom_col() +
-  facet_wrap(~amphibian_life_stage, scales = "free")
+  facet_wrap(~amphibian_life_stage, scales = "free") +
+  labs(title = "Mountain yellow-legged frog counts by life stage (1997-2002)",
+       x = "Year", y = "Frog counts") +
+  theme_minimal()
+```
+
+## Describe here
+etc etc
+
+```{r}
+# First, I create a subset of the data that only had adult and subadult yellow-legged frogs.
+adult_yellow <- amphibians %>% 
+  mutate(across(where(is.character), tolower)) %>% 
+  filter(amphibian_species == "ramu") %>%
+  filter(amphibian_life_stage == "adult" |
+           amphibian_life_stage == "subadult")
+
+# Here, I create another subset to give us the counts of the top five lakes with the greatest number of yellow-legged frogs.
+adult_yellow_ct <- adult_yellow %>% 
+  count(lake_id, wt = amphibian_number) %>% 
+  slice_max(n, n = 5) %>% 
+  mutate(
+    lake_id = paste("Lake", lake_id, sep = " ")
+    )
+
+# Next, we make a column graph of the top five lakes.
+ggplot(data = adult_yellow_ct, aes(x = reorder(lake_id, -n), y = n)) +
+  geom_col() +
+  labs(title = "Top five whatever",
+       x = "Lake ID", y = "Total frog counts") +
+  theme_minimal()
+  
 ```
 
