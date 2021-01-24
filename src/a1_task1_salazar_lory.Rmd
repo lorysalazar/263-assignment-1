@@ -6,11 +6,12 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 library(tidyverse)
 library(here)
 library(readxl)
 library(lubridate)
+library(patchwork)
 ```
 
 ## Describe here 
@@ -37,10 +38,9 @@ frog_count <- yellow_frogs %>%
   count(amphibian_life_stage, wt = amphibian_number)
 
 # Next, we create a plot of the data. 
-ggplot(data = frog_count, aes(x = year, y = n)) +
-  geom_col() +
-  facet_wrap(~amphibian_life_stage, scales = "free") +
-  labs(title = "Mountain yellow-legged frog counts by life stage (1997-2002)",
+ggplot(data = frog_count, aes(fill = amphibian_life_stage, x = year, y = n)) +
+  geom_bar(position = "dodge", stat = "identity") +
+  labs(title = "Total mountain yellow-legged frog counts by life stage (1995-2002)",
        x = "Year", y = "Frog counts") +
   theme_minimal()
 ```
@@ -65,11 +65,17 @@ adult_yellow_ct <- adult_yellow %>%
     )
 
 # Next, we make a column graph of the top five lakes.
-ggplot(data = adult_yellow_ct, aes(x = reorder(lake_id, -n), y = n)) +
-  geom_col() +
-  labs(title = "Top five whatever",
+top_five_lakes <- ggplot(data = adult_yellow_ct, aes(x = reorder(lake_id, -n), y = n)) +
+  geom_col(width = 0.6) +
+  labs(title = "Top five lakes with greatest total adult and subadult \nmountain yellow-legged frog counts (1995-2002)",
        x = "Lake ID", y = "Total frog counts") +
   theme_minimal()
-  
+```
+
+## Using `patchwork` for compound figures
+```{r}
+cmpnd_graph <- total_lakes / top_five_lakes
+
+cmpnd_graph
 ```
 
