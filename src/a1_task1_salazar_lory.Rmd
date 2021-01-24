@@ -1,0 +1,10 @@
+---
+title: 'Task 1: Sierra Amphibians'
+author: "Lory Salazar"
+date: "1/23/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
