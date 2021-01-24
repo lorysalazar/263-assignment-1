@@ -1,5 +1,5 @@
 ---
-title: 'Task 1: Sierra Amphibians'
+title: 'Sierra Amphibians: Mountain Yellow-legged Frog Counts'
 author: "Lory Salazar"
 date: "1/23/2021"
 output: html_document
@@ -14,14 +14,14 @@ library(lubridate)
 library(patchwork)
 ```
 
-## Describe here 
-etc etc
+## Part 1: Total frog counts by life stage and year
+First, we count the total number of adult, subadult, and tadpole mountain yellow-legged frogs during each year of the study. Further variables, such as lake ID, are not explored here. We are getting an overall look at frog counts based on life stage.
 
 ```{r}
 # We begin by reading in the data using read_excel from the readxl package.
 amphibians <- read_excel(here("data","sierra_amphibians.xlsx"))
 
-# Create a subset of the data to only include: adult, subadult, and tadpole mountain yellow-legged frogs
+# Here, we create a subset of the data to only include: adult, subadult, and tadpole mountain yellow-legged frogs. We also use functions from `lubridate` to add a column to the data containing the year.
 yellow_frogs <- amphibians %>% 
   mutate(across(where(is.character), tolower)) %>% 
   filter(amphibian_species == "ramu") %>% 
@@ -32,31 +32,32 @@ yellow_frogs <- amphibians %>%
   mutate(survey_date = ymd(survey_date)) %>% 
   mutate(year = year(survey_date))
 
-# Next, we will use the group_by function to group the frogs by year, and then take the total count of the frogs for each given year and life stage
+# Next, we will use the group_by function to group the frogs by year, and then take the total count of the frogs for each given year and life stage. The count function is weighted by amphibian number, which represents the number of observations.
 frog_count <- yellow_frogs %>% 
   group_by(year) %>% 
   count(amphibian_life_stage, wt = amphibian_number)
 
-# Next, we create a plot of the data. 
-ggplot(data = frog_count, aes(fill = amphibian_life_stage, x = year, y = n)) +
-  geom_bar(position = "dodge", stat = "identity") +
-  labs(title = "Total mountain yellow-legged frog counts by life stage (1995-2002)",
+# Next, we create a bar plot of the data, using facet_wrap to separate the plot by lifestage. We make sure to store this graph, so we can later use the stored graph to make a compound figure.
+total_lakes <- ggplot(data = frog_count, aes(x = year, y = n)) +
+  geom_col() +
+  facet_wrap(~amphibian_life_stage, scales = "free") +
+  labs(title = "A. Total mountain yellow-legged frog counts by life stage (1995-2002)",
        x = "Year", y = "Frog counts") +
   theme_minimal()
 ```
 
-## Describe here
-etc etc
+## Part 2: Top five lakes with greatest combined total frog counts
+Here, we count the combined total number of adult and subadult mountain yellow-legged frogs, based on lake ID. Then, we create a plot to get a look at the top five lakes with the greatest frog counts.
 
 ```{r}
-# First, I create a subset of the data that only had adult and subadult yellow-legged frogs.
+# First, we create a subset of the data that only had adult and subadult yellow-legged frogs.
 adult_yellow <- amphibians %>% 
   mutate(across(where(is.character), tolower)) %>% 
   filter(amphibian_species == "ramu") %>%
   filter(amphibian_life_stage == "adult" |
            amphibian_life_stage == "subadult")
 
-# Here, I create another subset to give us the counts of the top five lakes with the greatest number of yellow-legged frogs.
+# Here, we create another subset to give us the counts of the top five lakes with the greatest number of yellow-legged frogs. We also include a step to add the word "Lake" to the lake_id observations.
 adult_yellow_ct <- adult_yellow %>% 
   count(lake_id, wt = amphibian_number) %>% 
   slice_max(n, n = 5) %>% 
@@ -64,18 +65,21 @@ adult_yellow_ct <- adult_yellow %>%
     lake_id = paste("Lake", lake_id, sep = " ")
     )
 
-# Next, we make a column graph of the top five lakes.
+# Next, we make a column graph of the top five lakes. Again, we store this plot to use it in our next step.
 top_five_lakes <- ggplot(data = adult_yellow_ct, aes(x = reorder(lake_id, -n), y = n)) +
   geom_col(width = 0.6) +
-  labs(title = "Top five lakes with greatest total adult and subadult \nmountain yellow-legged frog counts (1995-2002)",
+  labs(title = "B. Top five lakes with greatest total adult and subadult \nmountain yellow-legged frog counts (1995-2002)",
        x = "Lake ID", y = "Total frog counts") +
   theme_minimal()
 ```
 
 ## Using `patchwork` for compound figures
+In the last step, we create a compound figure by stacking the graphs we created above. 
 ```{r}
+# Using `patchwork`, we create a figure which stacks our previous graphs. We use "/" here to stack.
 cmpnd_graph <- total_lakes / top_five_lakes
 
 cmpnd_graph
 ```
 
+**Figure 1.** A. Total counts of adult, subadult, and tadpole mountain yellow-legged frogs (*Rana muscosa*) measured by time in years, ranging from 1995 through 2002. B. Combined total counts of adult and subadult mountain yellow-legged frogs (*Rana muscosa*) observed in the top five lakes with greatest observed counts, from 1995 through 2002.
