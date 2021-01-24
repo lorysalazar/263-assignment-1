@@ -8,4 +8,23 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(here)
+library(readxl)
+library(lubridate)
 ```
+
+```{r}
+amphibians <- read_excel(here("data","sierra_amphibians.xlsx"))
+
+# Create a subset of the data to only include: adult, subadult, and tadpole mountain yellow-legged frogs
+yellow_frogs <- amphibians %>% 
+  mutate(across(where(is.character), tolower)) %>% 
+  filter(amphibian_species == "ramu") %>% 
+  filter(amphibian_life_stage == "adult" |
+           amphibian_life_stage == "subadult" |
+           amphibian_life_stage == "tadpole"
+         ) %>% 
+  mutate(survey_date = ymd(survey_date)) %>% 
+  mutate(year = year(survey_date))
+```
+
