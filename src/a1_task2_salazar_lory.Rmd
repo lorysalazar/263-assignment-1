@@ -14,9 +14,9 @@ library(ggfortify)
 ```
 
 ## Introduction
-3-4 sentences to understand data + add citation
+This report explores a principal components analysis using country-level environmental climactic variables. In this anallysis we focus on the variables: tree canopy cover, cloudiness, mean annual temperature, and mean annual rainfall. We perform a principal components analysis to explore the correlation of these variables. 
 
-Compiled and provided by @zander_venter on Kaggle, described as: “This data is all acquired through Google Earth Engine (https://earthengine.google.com/) where publicly available remote sensing datasets have been uploaded...Most of the data is derived by calculating the mean for each country at a reduction scale of about 10km.”
+Compiled and provided by @zander_venter on Kaggle, described as: “This data is all acquired through Google Earth Engine (https://earthengine.google.com/) where publicly available remote sensing datasets have been uploaded... Most of the data is derived by calculating the mean for each country at a reduction scale of about 10km.”
 
 ## Principal Components Analysis 
 
@@ -47,10 +47,15 @@ autoplot(env_pca,
   labs(title = "Principal components analysis of countries' tree cover, cloudiness,\nand mean annual temperature and rain") +
   theme_minimal()
 
-<<<<<<< HEAD
 ```
 
 **Figure 1.** A PCA biplot depicting cloudiness, tree canopy cover, mean annual temperature, and mean annual rain across countries. Arrows (red) indicate the loading of variables for the first two principal components, with the length of the arrow indicating variance, and the angle between arrows indicating correlation. Points (black) indicate the score of each case, based on the first two principal components, with closeness of points indicating similarity in the multivariate space.
+
+```{r, include = FALSE}
+# In this code chunk, we look at the variance explained by each PCA.
+screeplot(env_pca, type = "lines")
+```
+
 
 ## Summary
 
@@ -63,8 +68,4 @@ The principal components analysis of the country-level environmental and climact
 - Tree canopy cover and mean annual temperature are not correlated
 - Mean annual rain and mean annual temperature are not correlated 
 
-
 Further analysis may be to look at how the correlation of these variables differs based on country. 
-=======
-```
->>>>>>> 3a7bc481468a508b1a7a88f6531d94349841ee3b
