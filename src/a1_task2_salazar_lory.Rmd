@@ -16,6 +16,8 @@ library(ggfortify)
 ## Introduction
 3-4 sentences to understand data + add citation
 
+Compiled and provided by @zander_venter on Kaggle, described as: “This data is all acquired through Google Earth Engine (https://earthengine.google.com/) where publicly available remote sensing datasets have been uploaded...Most of the data is derived by calculating the mean for each country at a reduction scale of about 10km.”
+
 ## Principal Components Analysis 
 
 ```{r}
@@ -61,6 +63,4 @@ The principal components analysis of the country-level environmental and climact
 - Mean annual rain and mean annual temperature are not correlated 
 
 
-Further analysis may be to look at how the correlation of these variables differs based on country.  
-
-f
+Further analysis may be to look at how the correlation of these variables differs based on country. 
