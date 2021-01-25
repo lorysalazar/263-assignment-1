@@ -47,6 +47,7 @@ autoplot(env_pca,
   labs(title = "Principal components analysis of countries' tree cover, cloudiness,\nand mean annual temperature and rain") +
   theme_minimal()
 
+<<<<<<< HEAD
 ```
 
 **Figure 1.** A PCA biplot depicting cloudiness, tree canopy cover, mean annual temperature, and mean annual rain across countries. Arrows (red) indicate the loading of variables for the first two principal components, with the length of the arrow indicating variance, and the angle between arrows indicating correlation. Points (black) indicate the score of each case, based on the first two principal components, with closeness of points indicating similarity in the multivariate space.
@@ -64,3 +65,6 @@ The principal components analysis of the country-level environmental and climact
 
 
 Further analysis may be to look at how the correlation of these variables differs based on country. 
+=======
+```
+>>>>>>> 3a7bc481468a508b1a7a88f6531d94349841ee3b
